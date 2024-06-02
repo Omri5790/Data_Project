@@ -18,7 +18,7 @@ def get_hotels_list(driver):
     page_source = driver.page_source
     doc = BeautifulSoup(page_source, 'html.parser')
     hotels_list = doc.find_all('div', class_='uitk-card uitk-card-roundcorner-all uitk-card-has-border uitk-card-has-primary-theme')
-    print(f"extract hotels list succeed: {hotels_list}")
+    print(f"extract hotels list worked successfully")
     return hotels_list
 
 
@@ -29,13 +29,13 @@ def get_data_from_dates(start_date, end_date, temp_df, hotels_df, driver):
     hotels_list = get_hotels_list(driver)
     temp_df = hotels_to_df(hotels_list,temp_df,start_date, end_date)
     contact_df = pd.concat([hotels_df, temp_df], ignore_index=True, axis=0)
-    print(f"concat df: {contact_df}")
+    print(f"data extracted successfully: {contact_df}")
     return contact_df
 
 
 def hotels_to_df(hotels_list, df, start_date,
                  end_date):  # Function receives list of hotels, dataframe to insert the data into, start and end date
-    print("starting to convert hotels list data into df")
+    print("starting to extract data from hotels list into df")
     for i in range(0, 180):
         try:
             df.at[i, 'Snapshot'] = pd.Timestamp.today()
@@ -57,25 +57,30 @@ def hotels_to_df(hotels_list, df, start_date,
             df.at[i, 'Type of room'] = 0
             df.at[i, 'Location grade'] = 0
             refundable_element = hotels_list[i].find('div',
-                                                     class_="uitk-layout-flex uitk-layout-flex-flex-direction-column uitk-layout-flex-gap-three").find_all(
+                                                     class_="uitk-text uitk-type-300 uitk-text-positive-theme").find_all(
                 'span')
-            df.at[i, 'Is refundable'] = True if len(refundable_element) > 0 and refundable_element[0].text.__contains__(
+            print(f"refundable elemnt: {refundable_element}")
+            df.at[i, 'Is refundable'] = True if len(refundable_element) > 0 and refundable_element[0].str.contains(
                 'refundable') else False
             late_payment_element = hotels_list[i].find('div',
-                                                       class_="uitk-layout-flex uitk-layout-flex-flex-direction-column uitk-layout-flex-gap-three").find_all(
+                                                       class_="uitk-text uitk-type-300 uitk-text-positive-theme").find_all(
                 'span')
+            print(f"late_payment_element: {late_payment_element}")
             df.at[i, 'Late payment'] = True if len(late_payment_element) > 0 and late_payment_element[
-                -1].text.__contains__('later') else False
+                -1].str.contains('later') else False
             included_element = hotels_list[i].find('div',
-                                                   class_="uitk-text truncate uitk-type-200 uitk-text-default-theme")
+                                                   class_="uitk-text truncate-lines-2 uitk-type-200 uitk-text-default-theme")
+            print(f"included element: {included_element}")
             df.at[i, 'Breakfast included'] = included_element.text if included_element is not None else np.nan
             member_btn = hotels_list[i].find('a',
                                              class_='uitk-button uitk-button-small uitk-button-has-text uitk-button-as-link uitk-button-primary uitk-layout-flex-item-align-self-flex-end uitk-layout-flex-item')
+            print(f"membership element: {member_btn}")
             df.at[i, 'Option Member'] = True if member_btn else False
         except Exception as e:
-            print(f'error at hotel number: {i} | {e}')
+            print(f'error at hotel element: {hotels_list[i]} | {e}')
+            break
 
-    print(f"Successfuly finished to create df:\n{df[["Grade", "Num of Reviews"]]}")
+    print(f"Successfuly finished to create df:\n{df}")
     return df
 
 
@@ -84,10 +89,13 @@ def open_url(driver, url):
     ScrollNumber = 4
     for i in range(1,ScrollNumber):
         driver.execute_script("window.scrollTo(1,5000000)")
-        show_more_btn = driver.find_element("xpath", '//*[@id="app-layer-base"]/div/main/div/div/div/div/div[2]/section[2]/div/div[2]/div/div[2]/div[1]/div[4]/section/button')
-        if show_more_btn:
-            driver.execute_script("arguments[0].click();", show_more_btn)
-        else: print("Button not found")
+        try:
+            show_more_btn = driver.find_element("css selector", 'button[class="uitk-button uitk-button-medium uitk-button-has-text uitk-button-secondary"]')
+            # show_more_btn = driver.find_element("xpath", '//*[@id="app-layer-base"]/div/main/div/div/div/div/div[2]/section[2]/div/div[2]/div/div[2]/div[1]/div[3]/section/button')
+            if show_more_btn:
+                driver.execute_script("arguments[0].click();", show_more_btn)
+        except Exception as e:
+            print(f"failed while trying to click on show more button | {e}")
         time.sleep(5)
 
 
