@@ -44,6 +44,8 @@ def hotels_to_df(hotels_list, df, start_date, end_date):
             reviews_element = hotel.find_all('span', class_="uitk-text uitk-type-200 uitk-type-regular uitk-text-default-theme")
             df.at[i, 'Num of Reviews'] = reviews_element[-1].text if len(reviews_element) > 0 else np.nan
             prices_list = hotel.find_all('div', class_="uitk-text uitk-type-300 uitk-text-default-theme is-visually-hidden")
+            room_type_element = hotel.find('div', class_= "uitk-text uitk-text-spacing-half truncate-lines-2 uitk-type-300 uitk-text-default-theme")
+            df.at[i, 'Type of room'] = room_type_element.text if room_type_element is not None else np.nan
             if len(prices_list) > 1:
                 df.at[i, 'Curr Price'] = prices_list[1].text
                 df.at[i, 'Original Price'] = prices_list[0].text
@@ -52,7 +54,6 @@ def hotels_to_df(hotels_list, df, start_date, end_date):
                 df.at[i, 'Original Price'] = np.nan
             df.at[i, 'Percentage of discount'] = 0  # Placeholder, needs calculation logic if required
             df.at[i, 'Distance from center'] = 0  # Placeholder, needs extraction logic if available
-            df.at[i, 'Type of room'] = 0  # Placeholder, needs extraction logic if available
             df.at[i, 'Location grade'] = 0  # Placeholder, needs extraction logic if available
             refundable_element = hotel.find('div', class_="uitk-text uitk-type-300 uitk-text-positive-theme")
             if refundable_element and 'refundable' in refundable_element.text.lower():
@@ -72,7 +73,7 @@ def hotels_to_df(hotels_list, df, start_date, end_date):
             print(f'Error at hotel element: {i} | {e}')
             continue
 
-    print(f"Successfully finished creating df:\n{df}")
+    print(f"Successfully finished creating df:\n{df['Type of room']}")
     return df
 
 def open_url(driver, url):
