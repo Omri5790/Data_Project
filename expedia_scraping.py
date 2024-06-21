@@ -35,6 +35,8 @@ def hotels_to_df(hotels_list, df, start_date, end_date):
     for i, hotel in enumerate(hotels_list):
         try:
             df.at[i, 'Snapshot'] = pd.Timestamp.today()
+            df.at[i, "start_date"] = start_date
+            df.at[i, "end_date"] = end_date
             df.at[i, 'Index'] = i
             df.at[i, 'Hotel Name'] = hotel.find('h3').text
             df.at[i, 'TTT'] = (start_date - datetime.date.today()).days
@@ -73,7 +75,7 @@ def hotels_to_df(hotels_list, df, start_date, end_date):
             print(f'Error at hotel element: {i} | {e}')
             continue
 
-    print(f"Successfully finished creating df:\n{df['Type of room']}")
+    print(f"Successfully finished creating df:\n{df[["Index", "Hotel Name"]]}")
     return df
 
 def open_url(driver, url):
@@ -103,6 +105,8 @@ def main():
 
     # Create a dataframe - should handle all the data from the expedia site for each hotel that exist
     hotels_df = pd.DataFrame(columns=['Snapshot',
+                                      'start_date',
+                                      'end_date'
                                       'Index',
                                       'Hotel Name',
                                       'TTT',
