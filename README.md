@@ -24,7 +24,7 @@ In this project, we explore hotel price behaviors on Booking.com and Expedia.com
 
 ## Data Collection
 ### Web Scraping
-We used Python libraries like `Selenium`, `BeautifulSoup`, and `Scrapy` to scrape hotel search results from Booking.com and Expedia.com. Our scraping criteria included:
+We used Python libraries like `Selenium` and `BeautifulSoup` to scrape hotel search results from Booking.com and Expedia.com. Our scraping criteria included:
 - Location: New York
 - Search Parameters: Various combinations of TTT (Time to Travel) and LOS (Length of Stay)
 - Dates: Multiple snapshot dates to capture data diversity
