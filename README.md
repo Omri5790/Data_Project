@@ -49,8 +49,10 @@ We implemented several regression algorithms to predict hotel prices based on ou
 - Linear Regression
 - Decision Tree Regressor
 - Gaussian Process Regressor
-- Additional regression models from `scikit-learn`
-
+- Random forest Regressor
+- SVR
+- Neural networks Regressor
+  
 We split our data into training and testing sets, experimented with various hyperparameters, and evaluated model performance using metrics such as MAE, MSE, RMSE, and R².
 
 ## Price Difference Analysis
