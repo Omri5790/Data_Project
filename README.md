@@ -11,8 +11,7 @@ Welcome to our Data Project repository! This project is part of the Fundamentals
 5. [Price Difference Analysis](#price-difference-analysis)
 6. [Reverse Engineering Sorting Algorithms](#reverse-engineering-sorting-algorithms)
 7. [Results and Findings](#results-and-findings)
-8. [How to Run](#how-to-run)
-9. [Contributors](#contributors)
+8. [Contributors](#contributors)
 
 
 
