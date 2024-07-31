@@ -1,5 +1,5 @@
 
-# NY_Vacation Project: Hotel Price Analysis and Prediction
+# NY_Vacations Project: Hotel Price Analysis and Prediction
 
 
 Welcome to our Data Project repository! This project is part of the Fundamentals of Data Science course and focuses on analyzing and predicting hotel prices using data from Booking.com and Expedia.com.
